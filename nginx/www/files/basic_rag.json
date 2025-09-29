@@ -1,0 +1,536 @@
+{
+  "name": "basic_rag",
+  "nodes": [
+    {
+      "parameters": {
+        "chunkSize": 500,
+        "chunkOverlap": 50,
+        "options": {}
+      },
+      "id": "2b993a21-9968-4066-bc10-131e4518b613",
+      "name": "Recursive Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        960,
+        660
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Will fetch the filename in the documents bucket",
+        "height": 257.75985739596473,
+        "width": 179.58883583572606,
+        "color": 7
+      },
+      "id": "562a1111-bb7a-4114-8bed-466a1e4a4389",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        300,
+        180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.\n\nContext:\n----------\n\n{{ $json.context }}\n\nQuestion: {{ $(\"Chat Trigger\").first().json.chatInput }}",
+        "hasOutputParser": true
+      },
+      "id": "196733f7-9ccd-4d54-be9e-771f6fde1a72",
+      "name": "Answer the query based on chunks",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        1120,
+        960
+      ],
+      "typeVersion": 1.4
+    },
+    {
+      "parameters": {
+        "content": "## 2. Chat with file, getting citations in reponse",
+        "height": 548.5086735412393,
+        "width": 1693.989843925635,
+        "color": 7
+      },
+      "id": "d4df4bff-246b-42f3-bda2-d253dac6b96c",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        100,
+        840
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d77956c4-0ff4-4c64-80c2-9da9d4c8ad34",
+              "name": "text",
+              "type": "string",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "07120e03-4785-4db6-8c93-3b3f5f12fe23",
+      "name": "Generate response",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1560,
+        960
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "236047ff-75a2-47fd-b338-1e9763c4015e",
+              "name": "chunks",
+              "type": "number",
+              "value": 10
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "0f9e6dbe-6d83-4a1e-ad20-8068d5d547d7",
+      "name": "Set max chunks to send to model",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        140,
+        960
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "model": "=llama-3-8b-it",
+        "options": {
+          "baseURL": "https://ai.gpt.ntnx.pro/api/v1"
+        }
+      },
+      "id": "5516bb0e-bb6f-4c51-b4f7-bb0c34d7fa36",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        1120,
+        1180
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "openAiApi": {
+          "id": "Zcwxwpkx0Fxk0KO9",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let out = \"\"\nfor (const i in $input.all()) {\n  let itemText = \"--- CHUNK \" + i + \" ---\\n\"\n  itemText += $input.all()[i].json.document.pageContent + \"\\n\"\n  itemText += \"\\n\"\n  out += itemText\n}\n\nreturn {\n  'context': out\n};"
+      },
+      "id": "86553833-d704-4309-bfa2-c45bf11ce101",
+      "name": "Prepare chunks",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        820,
+        960
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {},
+      "id": "5986c798-3041-42b5-87aa-8de45b6637a5",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -100,
+        960
+      ],
+      "webhookId": "b00eadb1-5161-4ed8-a22b-0cc76d296a86",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {
+          "splitPages": false,
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "filename",
+                "value": "={{ $json.file_name }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "c7f2c6b9-8ea6-4e3e-950a-66692368a4a0",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        860,
+        500
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 1. Setup: Fetch file from S3 (objects), split it into chunks and insert into a vector database\nNote that running this part multiple times will insert multiple copies into your DB",
+        "height": 728.4168721167887,
+        "width": 1086.039382705461,
+        "color": 7
+      },
+      "id": "f16b5254-4add-4edc-8269-3ad04ffa8784",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        80,
+        60
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "efeb646b-6efe-489e-b1b2-d5aa7a268bf7",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -300,
+        360
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "bucketName": "lab-docs",
+        "fileKey": "={{ $json.file_name }}"
+      },
+      "type": "n8n-nodes-base.s3",
+      "typeVersion": 1,
+      "position": [
+        600,
+        260
+      ],
+      "id": "5aa00fda-3361-4076-85d7-b622e5d2ebd1",
+      "name": "S3",
+      "credentials": {
+        "s3": {
+          "id": "UcMHeFaYBVmLa2aL",
+          "name": "S3 account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1,
+      "position": [
+        800,
+        260
+      ],
+      "id": "b1a59836-7493-408e-bbf1-baf295076fc6",
+      "name": "Postgres PGVector Store",
+      "credentials": {
+        "postgres": {
+          "id": "nE5x1iutPNZ6VEVN",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "deleteTable",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_vectors",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        120,
+        460
+      ],
+      "id": "1d6eb824-afe0-49ac-8e49-7715d87f3899",
+      "name": "Delete old table",
+      "credentials": {
+        "postgres": {
+          "id": "nE5x1iutPNZ6VEVN",
+          "name": "Postgres account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "mode": "load",
+        "prompt": "={{ $json.chatInput }}",
+        "topK": "={{ $json.chunks }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1,
+      "position": [
+        400,
+        980
+      ],
+      "id": "fa6f6d64-f5af-45e0-b083-f1e926021649",
+      "name": "Postgres PGVector Store1",
+      "credentials": {
+        "postgres": {
+          "id": "nE5x1iutPNZ6VEVN",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "50025ff5-1b53-475f-b150-2aafef1c4c21",
+              "name": "file_name",
+              "type": "string",
+              "value": "nutanix_bible.pdf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c2a81cf3-0571-49a2-a6e8-cdf674c0232f",
+      "name": "Filename in Objects Bucket",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        340,
+        280
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "model": "embedding",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        600,
+        520
+      ],
+      "id": "314267c1-c66d-409d-9902-44d52d405a64",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "Zcwxwpkx0Fxk0KO9",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "embedding",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        1200
+      ],
+      "id": "9c7311d1-e9ef-4546-90bd-9571e084321a",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Zcwxwpkx0Fxk0KO9",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Answer the query based on chunks": {
+      "main": [
+        [
+          {
+            "node": "Generate response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set max chunks to send to model": {
+      "main": [
+        [
+          {
+            "node": "Postgres PGVector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Answer the query based on chunks",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare chunks": {
+      "main": [
+        [
+          {
+            "node": "Answer the query based on chunks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set max chunks to send to model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Postgres PGVector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Delete old table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "S3": {
+      "main": [
+        [
+          {
+            "node": "Postgres PGVector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete old table": {
+      "main": [
+        [
+          {
+            "node": "Filename in Objects Bucket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres PGVector Store1": {
+      "main": [
+        [
+          {
+            "node": "Prepare chunks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filename in Objects Bucket": {
+      "main": [
+        [
+          {
+            "node": "S3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Postgres PGVector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Postgres PGVector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "928e3fef-3c39-4eb1-befa-275cd5f544d0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a72dd4a1c7f451ee2cd46195be1dc21b426544e08b7efe8cfa851bd84d0071aa"
+  },
+  "id": "bwV6MICoIeuZR5bC",
+  "tags": []
+}

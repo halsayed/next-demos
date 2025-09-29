@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        function copyPassword(elementId) {
+            var passwordText = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(passwordText).then(function () {
+                // Show a subtle feedback
+                const btn = event.currentTarget;
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 1000);
+            }, function () {
+                alert("Failed to copy");
+            });
+        }
+    </script>
+    <link rel="icon" sizes="32x32" href="https://www.nutanix.com/content/dam/nutanix/global/favicons/favicon-32x32.png">
+    <link rel="icon" sizes="16x16" href="https://www.nutanix.com/content/dam/nutanix/global/favicons/favicon-16x16.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutanix AI Demo - .NEXT On Tour</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=1">
+</head>
+
+<body>
+    <!-- Header with gradient accent -->
+    <div class="gradient-bar"></div>
+    
+    <!-- Logo Section -->
+    <div class="header-section">
+        <div class="nutanix-logo">
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 385 47" width="300px" height="37px">
+                <path class="logo-path" d="m173.36,9.84h-18.15s-.03.01-.03.03v35.31c0,.38-.3.68-.68.68h-8.76c-.38,0-.68-.3-.68-.68V9.87s-.01-.03-.03-.03h-18.1c-.38,0-.68-.3-.68-.68V1.25c0-.38.3-.68.68-.68h46.42c.38,0,.68.3.68.68v7.91c0,.38-.3.68-.68.68ZM302.3.57h-8.77c-.38,0-.68.3-.68.68v43.93c0,.38.3.68.68.68h8.77c.38,0,.68-.3.68-.68V1.25c0-.38-.3-.68-.68-.68Zm70.84,44.19c.2.17.27.45.18.69-.09.24-.33.41-.59.41h-13.5c-.15,0-.3-.05-.41-.15l-14.83-12.84c-.14-.12-.22-.29-.22-.47s.08-.35.22-.47l6.75-5.84c.23-.2.58-.2.82,0l21.58,18.68Zm-22.4-24.41c.12.1.26.15.41.15s.29-.05.41-.15l21.58-18.68c.2-.17.27-.45.18-.69-.09-.24-.33-.41-.59-.41h-13.5c-.15,0-.3.05-.41.15l-14.83,12.84c-.14.12-.22.29-.22.47s.08.35.22.47l6.75,5.84Zm-2.83,2.87c0-.18-.08-.35-.22-.47L322.25.73c-.11-.1-.26-.15-.41-.15h-13.5c-.26,0-.5.16-.59.41-.09.25-.02.52.18.69l24.87,21.52s.01.03,0,.04l-24.87,21.52c-.2.17-.27.45-.18.69.09.24.33.41.59.41h13.5c.15,0,.3-.05.41-.15l25.44-22.02c.14-.12.22-.29.22-.47ZM21.77,15.29s.03-.04.05-.02c1.33,1.19,31.63,28.32,33.09,29.47,1.29,1.01,2.78,1.64,4.72,1.35,2.51-.31,5.28-2.45,5.28-6.07V1.25c0-.38-.3-.68-.68-.68h-8.77c-.38,0-.68.3-.68.68v29.86s-.03.04-.05.02c-1.33-1.19-31.63-28.32-33.09-29.47-1.29-1.01-2.78-1.64-4.72-1.35-2.51.31-5.28,2.46-5.28,6.07v38.81c0,.38.3.68.68.68h8.76c.38,0,.68-.3.68-.68V15.29Zm222.52,0s.03-.04.05-.02c1.33,1.19,31.63,28.32,33.09,29.47,1.29,1.01,2.78,1.64,4.72,1.35,2.51-.31,5.28-2.45,5.28-6.07V1.25c0-.38-.3-.68-.68-.68h-8.77c-.38,0-.68.3-.68.68v29.86s-.03.04-.05.02c-1.33-1.19-31.63-28.32-33.09-29.47-1.29-1.01-2.78-1.64-4.72-1.35-2.51.31-5.28,2.46-5.28,6.07v38.81c0,.38.3.68.68.68h8.76c.38,0,.68-.3.68-.68V15.29Zm-145.79,31.47c5.46-.01,11.55-.32,15.28-2.53,4.97-2.94,7.39-7.01,7.39-12.46V1.25c0-.37-.3-.68-.68-.68h-8.85c-.38,0-.68.3-.68.68v29.93c-.09,5.96-7.47,6.02-12.79,6.02h-4.84c-5.32,0-12.7-.06-12.79-6.02V1.25c0-.38-.31-.68-.68-.68h-8.85c-.37,0-.68.31-.68.68v30.53c0,5.45,2.42,9.52,7.39,12.46,3.74,2.21,9.82,2.52,15.28,2.53h5.49Zm131.49-1.92c.14.2.16.46.05.67-.11.22-.33.35-.57.35h-10.82c-.22,0-.42-.11-.55-.29l-6.31-9.03s-.01-.01-.02-.01h-32.46s-.02,0-.02.01l-6.34,9.04c-.12.17-.32.27-.52.27h-10.82c-.24,0-.46-.13-.57-.35-.11-.21-.09-.47.05-.67,0,0,27.53-39.29,29.23-41.64,1.7-2.35,3.41-2.96,5.25-2.96,2.03,0,3.59.76,5.1,2.78l29.35,41.82Zm-24.8-17.62l-9.63-13.64s-.03-.02-.05,0l-9.64,13.64s0,.04.02.04h19.27s.04-.03.02-.04Z" fill="#ffffff"></path>
+            </svg>
+        </div>
+        <div class="event-badge">
+            <span class="next-text">.NEXT</span>
+            <span class="tour-text">On Tour</span>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="hero-section">
+            <h1 class="main-title">AI Demo Experience</h1>
+            <p class="subtitle">Run Anything Anywhere</p>
+        </div>
+
+        <!-- AI Ecosystem Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="title-accent">AI</span> Ecosystem & Open Source
+                </div>
+                <div class="section-line"></div>
+            </div>
+            <div class="boxes">
+                <div class="box">
+                    <div class="box-gradient"></div>
+                    <a href="/media/chatbot.mp4" target="_blank" class="video-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </a>
+                    <a href="/chatbot/" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>ChatBot</h3>
+                        <p class="box-description">Interactive AI Assistant</p>
+                    </a>
+                </div>
+
+                <div class="box">
+                    <div class="box-gradient"></div>
+                    <a href="/media/flight.mp4" target="_blank" class="video-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </a>
+                    <a href="/flight/" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <h3>Flight Agent</h3>
+                        <p class="box-description">Intelligent Travel Assistant</p>
+                    </a>
+                </div>
+
+                <div class="box">
+                    <div class="box-gradient"></div>
+                    <a href="https://coder.bh.ntnx.pro" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Coder</h3>
+                        <p class="box-description">Cloud Development Environment</p>
+                    </a>
+                </div>
+
+                <div class="box">
+                    <div class="box-gradient"></div>
+                    <a href="http://demo.bh.ntnx.pro:3001" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Chat with Docs</h3>
+                        <p class="box-description">Document Intelligence</p>
+                    </a>
+                </div>
+
+                <div class="box">
+                    <div class="box-gradient"></div>
+                    <a href="/translator/" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3>Translator</h3>
+                        <p class="box-description">Multi-language Support</p>
+                    </a>
+                </div>
+
+                <div class="box">
+                    <div class="box-gradient"></div>
+                    <a href="/recruiter-assistant/" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3>Recruiter Assistant</h3>
+                        <p class="box-description">HR Intelligence Platform</p>
+                    </a>
+                </div>
+
+                <div class="box">
+                    <div class="box-gradient"></div>
+                    <a href="/ocr/" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3>NAI OCR</h3>
+                        <p class="box-description">Optical Character Recognition</p>
+                    </a>
+                </div>
+
+                <div class="box">
+                    <div class="box-gradient"></div>
+                    <a href="/healthcare/" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3>Healthcare</h3>
+                        <p class="box-description">Medical AI Solutions</p>
+                    </a>
+                </div>
+
+                <div class="box has-credentials">
+                    <div class="box-gradient"></div>
+                    <a href="https://n8n.bh.ntnx.pro" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h3>n8n</h3>
+                        <p class="box-description">Workflow Automation</p>
+                    </a>
+                    <div class="credentials">
+                        <div class="cred-item">
+                            <span class="cred-label">User:</span>
+                            <span id="n8n_user" class="cred-value">husain.ebrahim@nutanix.com</span>
+                            <button class="copy-btn" onclick="copyPassword('n8n_user')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="cred-item">
+                            <span class="cred-label">Pass:</span>
+                            <span id="n8n_pass" class="cred-value">Nutanix/4u</span>
+                            <button class="copy-btn" onclick="copyPassword('n8n_pass')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nutanix AI Stack Section -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <span class="title-accent">Nutanix</span> AI Stack
+                </div>
+                <div class="section-line"></div>
+            </div>
+            <div class="boxes">
+                <div class="box has-credentials featured">
+                    <div class="box-gradient"></div>
+                    <a href="/media/nai.mp4" target="_blank" class="video-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </a>
+                    <a href="https://nai.bh.ntnx.pro" target="_blank" class="box-content">
+                        <div class="icon-wrapper">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3>NAI Endpoint</h3>
+                        <p class="box-description">Enterprise AI Infrastructure</p>
+                    </a>
+                    <div class="credentials">
+                        <div class="cred-item">
+                            <span class="cred-label">User:</span>
+                            <span id="nai_user" class="cred-value">admin</span>
+                            <button class="copy-btn" onclick="copyPassword('nai_user')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="cred-item">
+                            <span class="cred-label">Pass:</span>
+                            <span id="nai_pass" class="cred-value">Nutanix/4u</span>
+                            <button class="copy-btn" onclick="copyPassword('nai_pass')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Demo Page</p>
+    </div>
+</body>
+</html>
